@@ -19,7 +19,7 @@ function calculateRanking (path) {
 
    var initialScore = 1000;
    // The stake.
-   var weight = 20;
+   var weight = 10;
 
    var record = [];
    var sourceFile = node.fs.readFileSync (path, 'utf8');
@@ -59,7 +59,7 @@ function calculateRanking (path) {
       var updatedScores = eval (scores);
 
       function expectedResult (i) {
-         return (1 / (1 + 10 ^ ((i.playerScore - i.opponentScore) / 400)));
+         return (1 / (1 + Math.pow (10, (i.playerScore - i.opponentScore) / 400)));
       }
 
       function rankingDelta (i) {
