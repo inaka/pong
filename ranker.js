@@ -18,8 +18,6 @@ var node = {
 function calculateRanking (path) {
 
    var initialScore = 1000;
-   // The stake.
-   var weight = 10;
 
    var record = [];
    var sourceFile = node.fs.readFileSync (path, 'utf8');
@@ -62,8 +60,18 @@ function calculateRanking (path) {
          return (1 / (1 + Math.pow (10, (i.playerScore - i.opponentScore) / 400)));
       }
 
+      function weightForMatch (i) {
+         var w = i / 10;
+         return (w > 10) ? w : 10;
+      }
+
+      function scoreDifference (i) {
+         return Math.abs(i.playerScore - i.opponentScore);
+      }
+
       function rankingDelta (i) {
-         return (weight * i.actualResult - i.expectedResult);
+         var w = weightForMatch (i.scoreDifference);
+         return (w * i.actualResult - i.expectedResult);
       }
 
       function isWinner (i) {
@@ -87,6 +95,10 @@ function calculateRanking (path) {
          expectedResult: expectedResult ({
             playerScore: updatedScores [opponents [0]],
             opponentScore: updatedScores [opponents [1]],
+         }),
+         scoreDifference: scoreDifference ({
+            playerScore: updatedScores [opponents [1]],
+            opponentScore: updatedScores [opponents [0]],
          })
       });
 
@@ -96,6 +108,10 @@ function calculateRanking (path) {
             player: opponents [1],
          }),
          expectedResult: expectedResult ({
+            playerScore: updatedScores [opponents [1]],
+            opponentScore: updatedScores [opponents [0]],
+         }),
+         scoreDifference: scoreDifference ({
             playerScore: updatedScores [opponents [1]],
             opponentScore: updatedScores [opponents [0]],
          })
