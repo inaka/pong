@@ -101,19 +101,22 @@ public class Ranker {
 				th.graph(), th.edgeWeights(), 0.15);
 		pr.evaluate();
 
-		double sum = 0;
+		int sum = 0;
 		Set<String> sortedVerticesSet = new HashSet<String>(th.graph()
 				.getVertices());
 
-		SortedMap<Integer, String> table = new TreeMap<Integer, String>();
+		SortedMap<Integer, List<String>> table = new TreeMap<Integer, List<String>>();
 
 		for (String v : sortedVerticesSet) {
-			double score = pr.getVertexScore(v) * 100;
+			int score = new Double(pr.getVertexScore(v) * 100000).intValue();
 			sum += score;
-			table.put(new Double(score * 1000).intValue(), v);
+			List<String> current = table.get(score);
+			if (current == null)
+				table.put(score, new Vector<String>());
+			table.get(score).add(v);
 		}
 		System.out.println(table);
-		System.out.println("total = " + new Double(sum * 1000).intValue());
+		System.out.println("total = " + sum);
 	}
 
 	private static TournamentHistory readHistory() {
