@@ -105,15 +105,15 @@ public class Ranker {
 		Set<String> sortedVerticesSet = new HashSet<String>(th.graph()
 				.getVertices());
 
-		SortedMap<Double, String> table = new TreeMap<Double, String>();
+		SortedMap<Integer, String> table = new TreeMap<Integer, String>();
 
 		for (String v : sortedVerticesSet) {
 			double score = pr.getVertexScore(v) * 100;
 			sum += score;
-			table.put(score, v);
+			table.put(new Double(score * 1000).intValue(), v);
 		}
 		System.out.println(table);
-		System.out.println("total = " + sum);
+		System.out.println("total = " + new Double(sum * 1000).intValue());
 	}
 
 	private static TournamentHistory readHistory() {
