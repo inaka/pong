@@ -116,7 +116,7 @@ public class Ranker {
 			table.get(score).add(v);
 		}
 		System.out.println(table);
-		System.out.println("total = " + sum);
+		System.out.println("DEBUG: total = " + sum);
 	}
 
 	private static TournamentHistory readHistory() {
@@ -147,7 +147,7 @@ public class Ranker {
 			for (SpreadsheetEntry spreadsheet : spreadsheets)
 				if (spreadsheet.getKey().equals("tAgvnojXZmFTN28_5ar9W3A")) {
 					inakaPongSheet = spreadsheet;
-					System.out.println(inakaPongSheet.getId() + "/"
+					System.out.println("DEBUG: " + inakaPongSheet.getId() + "/"
 							+ inakaPongSheet.getKey());
 					break;
 				}
@@ -157,7 +157,7 @@ public class Ranker {
 				String[] dates = worksheet.getTitle().getPlainText()
 						.split(" - ");
 				if (dates.length == 2) {
-					System.out.println("Reading tournament " + dates[0]
+					System.out.println("DEBUG: Reading tournament " + dates[0]
 							+ " -> " + dates[1] + "...");
 
 					URL cellFeedUrl = worksheet.getCellFeedUrl();
@@ -177,8 +177,8 @@ public class Ranker {
 							else if (origPlayerName.equals("steph"))
 								playerName = "stef";
 							if (playerName != null && playerName.length() > 0) {
-								System.out.println("Player #" + row + ": "
-										+ playerName);
+								System.out.println("DEBUG: Player #" + row
+										+ ": " + playerName);
 								tPlayers[row] = playerName;
 								players.add(playerName);
 							}
@@ -190,10 +190,10 @@ public class Ranker {
 						int row = cell.getCell().getRow();
 						if (row > 1) {
 							if (tPlayers[row] == null) {
-								System.out.println("No more players");
+								System.out.println("DEBUG: No more players");
 								break;
 							} else if (col == 1)
-								System.out.println("Reading data for "
+								System.out.println("DEBUG: Reading data for "
 										+ tPlayers[row] + "...");
 
 							if (row > 1 && col > 1 && col < 44
@@ -201,7 +201,8 @@ public class Ranker {
 								if (cell.getCell().getNumericValue() != null
 										&& cell.getCell().getNumericValue()
 												.intValue() == 1) {
-									System.out.println(tPlayers[row] + " < "
+									System.out.println("DEBUG: "
+											+ tPlayers[row] + " < "
 											+ tPlayers[(col - 1) / 3 + 1]);
 									matches.add(new Pair<String>(tPlayers[row],
 											tPlayers[(col - 1) / 3 + 1]));
