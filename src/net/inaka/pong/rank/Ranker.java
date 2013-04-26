@@ -247,11 +247,14 @@ public class Ranker {
 				}
 
 		for (Pair<String> match : matches) {
-			edgesByMatch.get(match).incr();
-			edgesByMatch.get(match).incr();
-			edgesByMatch.get(
-					new Pair<String>(match.getSecond(), match.getFirst()))
-					.decr();
+			if (players.contains(match.getFirst())
+					&& players.contains(match.getSecond())) {
+				edgesByMatch.get(match).incr();
+				edgesByMatch.get(match).incr();
+				edgesByMatch.get(
+						new Pair<String>(match.getSecond(), match.getFirst()))
+						.decr();
+			}
 		}
 
 		Transformer<Integer, Double> ew = new Transformer<Integer, Double>() {
