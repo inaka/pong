@@ -157,6 +157,7 @@ public class Ranker {
 				}
 
 			List<WorksheetEntry> worksheets = inakaPongSheet.getWorksheets();
+			boolean firstTournament = true;
 			for (WorksheetEntry worksheet : worksheets) {
 				String[] dates = worksheet.getTitle().getPlainText()
 						.split(" - ");
@@ -184,7 +185,8 @@ public class Ranker {
 								System.out.println("DEBUG: Player #" + row
 										+ ": " + playerName);
 								tPlayers[row] = playerName;
-								players.add(playerName);
+								if (firstTournament)
+									players.add(playerName);
 							}
 						}
 					}
@@ -215,11 +217,17 @@ public class Ranker {
 						}
 					}
 				}
+				firstTournament = false;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+		if(Math.random() > 0.5) players.add("pi–on fijo");
+		if(Math.random() > 0.5) players.add("el loco dalla l’bera");
+		if(Math.random() > 0.5) players.add("el mu–eco gallardo");
+		if(Math.random() > 0.5) players.add("hubot");
+		
 		System.out.println("Players: " + players + " (" + matches.size()
 				+ " matches)");
 
