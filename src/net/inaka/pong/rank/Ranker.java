@@ -179,7 +179,8 @@ public class Ranker {
 		SortedMap<Integer, List<String>> table = new TreeMap<Integer, List<String>>();
 
 		for (String v : games.keySet()) {
-			System.out.println("DEBUG - " + v + ": " + points.get(v) + "/" + games.get(v));
+			System.out.println("DEBUG - " + v + ": " + points.get(v) + "/"
+					+ games.get(v));
 			int score = new Double(points.get(v) / games.get(v) * 1000)
 					.intValue();
 			List<String> current = table.get(score);
