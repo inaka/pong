@@ -223,10 +223,12 @@ public class Ranker {
 			e.printStackTrace();
 		}
 
-		if(Math.random() > 0.5) players.add("pi–on fijo");
+/*		if(Math.random() > 0.5) players.add("pi–on fijo");
 		if(Math.random() > 0.5) players.add("el loco dalla l’bera");
 		if(Math.random() > 0.5) players.add("el mu–eco gallardo");
 		if(Math.random() > 0.5) players.add("hubot");
+		*/
+		players.add("mitad-de-tabla");
 		
 		System.out.println("Players: " + players + " (" + matches.size()
 				+ " matches)");
