@@ -213,30 +213,19 @@ public class Ranker {
 							.getSecond()) + 1);
 		}
 
-		for (int i = 0; i < 25; i++) {
-			TreeMap<String, Double> avgs = new TreeMap<String, Double>();
-			for (String v : games.keySet()) {
-				avgs.put(
-						v,
-						points.get(v) == null ? 0.0 : points.get(v)
-								/ games.get(v));
-			}
+		TreeMap<String, Double> avgs = new TreeMap<String, Double>();
+		for (String v : games.keySet()) {
+			avgs.put(v,
+					points.get(v) == null ? 0.0 : points.get(v) / games.get(v));
+		}
 
-			// double generalAvg = 0.0;
-			// for (Double value : avgs.values())
-			// generalAvg += value;
-			// generalAvg /= avgs.size();
+		points.clear();
 
-			System.out.println("DEBUG - Iteration " + i + ": " + avgs);
-
-			points.clear();
-
-			for (Pair<String> match : th.matches()) {
-				double matchPoints = avgs.get(match.getFirst()) * 3;
-				points.put(match.getSecond(),
-						points.get(match.getSecond()) == null ? matchPoints
-								: points.get(match.getSecond()) + matchPoints);
-			}
+		for (Pair<String> match : th.matches()) {
+			double matchPoints = avgs.get(match.getFirst()) * 3;
+			points.put(match.getSecond(),
+					points.get(match.getSecond()) == null ? matchPoints
+							: points.get(match.getSecond()) + matchPoints);
 		}
 
 		SortedMap<Integer, List<String>> table = new TreeMap<Integer, List<String>>();
