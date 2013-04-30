@@ -161,27 +161,26 @@ public class Ranker {
 	 */
 	private static SortedMap<Integer, List<String>> averages(
 			TournamentHistory th) {
-		TreeMap<String, Integer> points = new TreeMap<String, Integer>();
+		TreeMap<String, Double> points = new TreeMap<String, Double>();
 		TreeMap<String, Integer> games = new TreeMap<String, Integer>();
 
 		for (Pair<String> match : th.matches()) {
-			points.put(
-					match.getSecond(),
-					points.get(match.getSecond()) == null ? 1 : points
-							.get(match.getSecond()) + 1);
-			games.put(match.getFirst(), games.get(match.getFirst()) == null ? 1
-					: games.get(match.getFirst()) + 1);
-			games.put(
-					match.getSecond(),
-					games.get(match.getSecond()) == null ? 1 : games.get(match
-							.getSecond()) + 1);
+			points.put(match.getFirst(), 0.0);
+			points.put(match.getSecond(), 0.0);
+			games.put(match.getFirst(), 0);
+			games.put(match.getSecond(), 0);
+		}
+		for (Pair<String> match : th.matches()) {
+			points.put(match.getSecond(), points.get(match.getSecond()) + 1);
+			games.put(match.getFirst(), games.get(match.getFirst()) + 1);
+			games.put(match.getSecond(), games.get(match.getSecond()) + 1);
 		}
 
 		SortedMap<Integer, List<String>> table = new TreeMap<Integer, List<String>>();
 
 		for (String v : games.keySet()) {
-			int score = points.get(v) == null ? 0 : new Double(new Double(
-					points.get(v)) / new Double(games.get(v)) * 1000)
+			System.out.println("DEBUG - " + v + ": " + points.get(v) + "/" + games.get(v));
+			int score = new Double(points.get(v) / games.get(v) * 1000)
 					.intValue();
 			List<String> current = table.get(score);
 			if (current == null)
