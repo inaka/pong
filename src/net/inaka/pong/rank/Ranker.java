@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -59,11 +60,20 @@ class TournamentHistory {
 
 	private DirectedSparseGraph<String, Integer>	graph;
 	private Transformer<Integer, Double>			edgeWeights;
+	private List<Pair<String>>						matches;
 
 	public TournamentHistory(DirectedSparseGraph<String, Integer> g,
-			Transformer<Integer, Double> ew) {
+			Transformer<Integer, Double> ew, List<Pair<String>> matches) {
 		this.graph = g;
 		this.edgeWeights = ew;
+		this.matches = matches;
+	}
+
+	/**
+	 * @return the matches
+	 */
+	public List<Pair<String>> matches() {
+		return matches;
 	}
 
 	/**
@@ -101,11 +111,35 @@ public class Ranker {
 	public static void main(String args[]) {
 		TournamentHistory th = readHistory();
 
+		System.out.println("Pong Rank: ");
+		for (Entry<Integer, List<String>> entry : pongRank(th).entrySet()) {
+			System.out.print(entry.getKey() + " " + entry.getValue() + "; ");
+		}
+		System.out.println();
+		System.out.println();
+		System.out.println("Averages: ");
+		for (Entry<Integer, List<String>> entry : averages(th).entrySet()) {
+			System.out.print(entry.getKey() + " " + entry.getValue() + "; ");
+		}
+		System.out.println();
+		System.out.println();
+		System.out.println("Averages (with iterations): ");
+		for (Entry<Integer, List<String>> entry : averages2(th).entrySet()) {
+			System.out.print(entry.getKey() + " " + entry.getValue() + "; ");
+		}
+		System.out.println();
+	}
+
+	/**
+	 * @param th
+	 * @return
+	 */
+	private static SortedMap<Integer, List<String>> pongRank(
+			TournamentHistory th) {
 		PageRank<String, Integer> pr = new PageRank<String, Integer>(
 				th.graph(), th.edgeWeights(), 0.15);
 		pr.evaluate();
 
-		int sum = 0;
 		Set<String> sortedVerticesSet = new HashSet<String>(th.graph()
 				.getVertices());
 
@@ -113,14 +147,110 @@ public class Ranker {
 
 		for (String v : sortedVerticesSet) {
 			int score = new Double(pr.getVertexScore(v) * 100000).intValue();
-			sum += score;
 			List<String> current = table.get(score);
 			if (current == null)
 				table.put(score, new Vector<String>());
 			table.get(score).add(v);
 		}
-		System.out.println(table);
-		System.out.println("DEBUG: total = " + sum);
+		return table;
+	}
+
+	/**
+	 * @param th
+	 * @return
+	 */
+	private static SortedMap<Integer, List<String>> averages(
+			TournamentHistory th) {
+		TreeMap<String, Integer> points = new TreeMap<String, Integer>();
+		TreeMap<String, Integer> games = new TreeMap<String, Integer>();
+
+		for (Pair<String> match : th.matches()) {
+			points.put(
+					match.getSecond(),
+					points.get(match.getSecond()) == null ? 1 : points
+							.get(match.getSecond()) + 1);
+			games.put(match.getFirst(), games.get(match.getFirst()) == null ? 1
+					: games.get(match.getFirst()) + 1);
+			games.put(
+					match.getSecond(),
+					games.get(match.getSecond()) == null ? 1 : games.get(match
+							.getSecond()) + 1);
+		}
+
+		SortedMap<Integer, List<String>> table = new TreeMap<Integer, List<String>>();
+
+		for (String v : games.keySet()) {
+			int score = points.get(v) == null ? 0 : new Double(new Double(
+					points.get(v)) / new Double(games.get(v)) * 1000)
+					.intValue();
+			List<String> current = table.get(score);
+			if (current == null)
+				table.put(score, new Vector<String>());
+			table.get(score).add(v);
+		}
+		return table;
+	}
+
+	/**
+	 * @param th
+	 * @return
+	 */
+	private static SortedMap<Integer, List<String>> averages2(
+			TournamentHistory th) {
+		TreeMap<String, Double> points = new TreeMap<String, Double>();
+		TreeMap<String, Integer> games = new TreeMap<String, Integer>();
+
+		for (Pair<String> match : th.matches()) {
+			points.put(
+					match.getSecond(),
+					points.get(match.getSecond()) == null ? 1 : points
+							.get(match.getSecond()) + 1);
+			games.put(match.getFirst(), games.get(match.getFirst()) == null ? 1
+					: games.get(match.getFirst()) + 1);
+			games.put(
+					match.getSecond(),
+					games.get(match.getSecond()) == null ? 1 : games.get(match
+							.getSecond()) + 1);
+		}
+
+		for (int i = 0; i < 25; i++) {
+			TreeMap<String, Double> avgs = new TreeMap<String, Double>();
+			for (String v : games.keySet()) {
+				avgs.put(
+						v,
+						points.get(v) == null ? 0.0 : points.get(v)
+								/ games.get(v));
+			}
+
+			// double generalAvg = 0.0;
+			// for (Double value : avgs.values())
+			// generalAvg += value;
+			// generalAvg /= avgs.size();
+
+			System.out.println("DEBUG - Iteration " + i + ": " + avgs);
+
+			points.clear();
+
+			for (Pair<String> match : th.matches()) {
+				double matchPoints = avgs.get(match.getFirst()) * 3;
+				points.put(match.getSecond(),
+						points.get(match.getSecond()) == null ? matchPoints
+								: points.get(match.getSecond()) + matchPoints);
+			}
+		}
+
+		SortedMap<Integer, List<String>> table = new TreeMap<Integer, List<String>>();
+
+		for (String v : games.keySet()) {
+			int score = points.get(v) == null ? 0 : new Double(new Double(
+					points.get(v)) / new Double(games.get(v)) * 1000)
+					.intValue();
+			List<String> current = table.get(score);
+			if (current == null)
+				table.put(score, new Vector<String>());
+			table.get(score).add(v);
+		}
+		return table;
 	}
 
 	private static TournamentHistory readHistory() {
@@ -223,13 +353,14 @@ public class Ranker {
 			e.printStackTrace();
 		}
 
-/*		if(Math.random() > 0.5) players.add("pi–on fijo");
-		if(Math.random() > 0.5) players.add("el loco dalla l’bera");
-		if(Math.random() > 0.5) players.add("el mu–eco gallardo");
-		if(Math.random() > 0.5) players.add("hubot");
-		*/
+		/*
+		 * if(Math.random() > 0.5) players.add("pi–on fijo"); if(Math.random() >
+		 * 0.5) players.add("el loco dalla l’bera"); if(Math.random() > 0.5)
+		 * players.add("el mu–eco gallardo"); if(Math.random() > 0.5)
+		 * players.add("hubot");
+		 */
 		players.add("mitad-de-tabla");
-		
+
 		System.out.println("Players: " + players + " (" + matches.size()
 				+ " matches)");
 
@@ -276,6 +407,6 @@ public class Ranker {
 			}
 		};
 
-		return new TournamentHistory(g, ew);
+		return new TournamentHistory(g, ew, matches);
 	}
 }
