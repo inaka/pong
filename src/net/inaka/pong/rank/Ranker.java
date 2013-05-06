@@ -1,6 +1,8 @@
 package net.inaka.pong.rank;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -219,10 +221,16 @@ public class Ranker {
 					points.get(v) == null ? 0.0 : points.get(v) / games.get(v));
 		}
 
+		ArrayList<Double> avgsList = new ArrayList<Double>(avgs.values());
+		Collections.sort(avgsList);
+		Double median = avgsList.size() == 0 ? 3.0 : avgsList.get(avgsList
+				.size() / 2);
+		System.out.println("DEBUG - Median factor: " + (1 / median));
+
 		points.clear();
 
 		for (Pair<String> match : th.matches()) {
-			double matchPoints = avgs.get(match.getFirst()) * 3;
+			double matchPoints = avgs.get(match.getFirst()) / median;
 			points.put(match.getSecond(),
 					points.get(match.getSecond()) == null ? matchPoints
 							: points.get(match.getSecond()) + matchPoints);
