@@ -284,7 +284,6 @@ public class Ranker {
 				}
 
 			List<WorksheetEntry> worksheets = inakaPongSheet.getWorksheets();
-			boolean firstTournament = true;
 			for (WorksheetEntry worksheet : worksheets) {
 				String[] dates = worksheet.getTitle().getPlainText()
 						.split(" - ");
@@ -308,11 +307,14 @@ public class Ranker {
 								playerName = "gato";
 							else if (origPlayerName.equals("steph"))
 								playerName = "stef";
+							else if (origPlayerName.equals("i–aki"))
+								playerName = "inaki";
+
 							if (playerName != null && playerName.length() > 0) {
 								System.out.println("DEBUG: Player #" + row
 										+ ": " + playerName);
 								tPlayers[row] = playerName;
-								if (firstTournament)
+								if (!playerName.equals("freers"))
 									players.add(playerName);
 							}
 						}
@@ -344,18 +346,11 @@ public class Ranker {
 						}
 					}
 				}
-				firstTournament = false;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		/*
-		 * if(Math.random() > 0.5) players.add("pi–on fijo"); if(Math.random() >
-		 * 0.5) players.add("el loco dalla l’bera"); if(Math.random() > 0.5)
-		 * players.add("el mu–eco gallardo"); if(Math.random() > 0.5)
-		 * players.add("hubot");
-		 */
 		players.add("mitad-de-tabla");
 
 		System.out.println("Players: " + players + " (" + matches.size()
@@ -384,15 +379,17 @@ public class Ranker {
 					edgeNum++;
 				}
 
+		for (Pair<String> match : matches)
+			if (!players.contains(match.getFirst())
+					|| !players.contains(match.getSecond()))
+				matches.remove(match);
+
 		for (Pair<String> match : matches) {
-			if (players.contains(match.getFirst())
-					&& players.contains(match.getSecond())) {
-				edgesByMatch.get(match).incr();
-				edgesByMatch.get(match).incr();
-				edgesByMatch.get(
-						new Pair<String>(match.getSecond(), match.getFirst()))
-						.decr();
-			}
+			edgesByMatch.get(match).incr();
+			edgesByMatch.get(match).incr();
+			edgesByMatch.get(
+					new Pair<String>(match.getSecond(), match.getFirst()))
+					.decr();
 		}
 
 		Transformer<Integer, Double> ew = new Transformer<Integer, Double>() {
