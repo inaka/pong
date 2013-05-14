@@ -15,6 +15,9 @@ import java.util.Vector;
 
 import org.apache.commons.collections15.Transformer;
 
+import cern.colt.list.DoubleArrayList;
+import cern.jet.stat.Descriptive;
+
 import com.google.gdata.client.spreadsheet.SpreadsheetQuery;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.spreadsheet.CellEntry;
@@ -221,16 +224,17 @@ public class Ranker {
 					points.get(v) == null ? 0.0 : points.get(v) / games.get(v));
 		}
 
-		ArrayList<Double> avgsList = new ArrayList<Double>(avgs.values());
-		Collections.sort(avgsList);
-		Double median = avgsList.size() == 0 ? 3.0 : avgsList.get(avgsList
-				.size() / 2);
-		System.out.println("DEBUG - Median factor: " + (1 / median));
+		DoubleArrayList avgsList = new DoubleArrayList(avgs.size());
+		avgsList.addAllOf(avgs.values());
+		avgsList.sort();
+		Double avgavg = Descriptive.mean(avgsList);
+
+		System.out.println("Mean factor: " + (1 / avgavg));
 
 		points.clear();
 
 		for (Pair<String> match : th.matches()) {
-			double matchPoints = avgs.get(match.getFirst()) / median;
+			double matchPoints = avgs.get(match.getFirst()) / avgavg;
 			points.put(match.getSecond(),
 					points.get(match.getSecond()) == null ? matchPoints
 							: points.get(match.getSecond()) + matchPoints);
