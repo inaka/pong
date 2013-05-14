@@ -159,13 +159,6 @@ public class Ranker {
 		for (Entry<Integer, List<String>> entry : averages2(th).entrySet()) {
 			System.out.print(entry.getKey() + " " + entry.getValue() + "; ");
 		}
-		System.out.println();
-		System.out.println();
-		System.out.println("Averages (with age): ");
-		for (Entry<Integer, List<String>> entry : averages3(th).entrySet()) {
-			System.out.print(entry.getKey() + " " + entry.getValue() + "; ");
-		}
-		System.out.println();
 	}
 
 	/**
@@ -375,7 +368,11 @@ public class Ranker {
 
 			List<WorksheetEntry> worksheets = inakaPongSheet.getWorksheets();
 			Double age = 0.0;
+			int tournaments = 6;
 			for (WorksheetEntry worksheet : worksheets) {
+				if (tournaments == 0)
+					break;
+				tournaments--;
 				String[] dates = worksheet.getTitle().getPlainText()
 						.split(" - ");
 				if (dates.length == 2) {
