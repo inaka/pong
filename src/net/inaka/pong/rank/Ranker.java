@@ -1,8 +1,6 @@
 package net.inaka.pong.rank;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -162,6 +160,12 @@ public class Ranker {
 			System.out.print(entry.getKey() + " " + entry.getValue() + "; ");
 		}
 		System.out.println();
+		System.out.println();
+		System.out.println("Averages (with age): ");
+		for (Entry<Integer, List<String>> entry : averages3(th).entrySet()) {
+			System.out.print(entry.getKey() + " " + entry.getValue() + "; ");
+		}
+		System.out.println();
 	}
 
 	/**
@@ -280,6 +284,62 @@ public class Ranker {
 		return table;
 	}
 
+	/**
+	 * @param th
+	 * @return
+	 */
+	private static SortedMap<Integer, List<String>> averages3(
+			TournamentHistory th) {
+		TreeMap<String, Double> points = new TreeMap<String, Double>();
+		TreeMap<String, Integer> games = new TreeMap<String, Integer>();
+
+		for (Match match : th.matches()) {
+			points.put(match.winner(), points.get(match.winner()) == null ? 1
+					: points.get(match.winner()) + 1);
+			games.put(match.loser(), games.get(match.loser()) == null ? 1
+					: games.get(match.loser()) + 1);
+			games.put(match.winner(), games.get(match.winner()) == null ? 1
+					: games.get(match.winner()) + 1);
+		}
+
+		TreeMap<String, Double> avgs = new TreeMap<String, Double>();
+		for (String v : games.keySet()) {
+			avgs.put(v,
+					points.get(v) == null ? 0.0 : points.get(v) / games.get(v));
+		}
+
+		DoubleArrayList avgsList = new DoubleArrayList(avgs.size());
+		avgsList.addAllOf(avgs.values());
+		avgsList.sort();
+		Double avgavg = Descriptive.mean(avgsList);
+
+		System.out.println("Mean factor: " + (1 / avgavg));
+
+		points.clear();
+
+		for (Match match : th.matches()) {
+			double matchPoints = avgs.get(match.loser()) / avgavg
+					* (1 - match.age());
+			points.put(
+					match.winner(),
+					points.get(match.winner()) == null ? matchPoints : points
+							.get(match.winner()) + matchPoints);
+		}
+
+		SortedMap<Integer, List<String>> table = new TreeMap<Integer, List<String>>();
+
+		for (String v : games.keySet()) {
+			int score = points.get(v) == null ? 0 : new Double(new Double(
+					points.get(v)) / new Double(games.get(v)) * 1000)
+					.intValue();
+			List<String> current = table.get(score);
+			if (current == null)
+				table.put(score, new Vector<String>());
+			table.get(score).add(v);
+		}
+		return table;
+	}
+
 	private static TournamentHistory readHistory() {
 		Set<String> players = new HashSet<String>();
 		final List<Match> matches = new Vector<Match>();
@@ -314,7 +374,7 @@ public class Ranker {
 				}
 
 			List<WorksheetEntry> worksheets = inakaPongSheet.getWorksheets();
-			Double age = 0.01;
+			Double age = 0.0;
 			for (WorksheetEntry worksheet : worksheets) {
 				String[] dates = worksheet.getTitle().getPlainText()
 						.split(" - ");
@@ -377,7 +437,7 @@ public class Ranker {
 						}
 					}
 
-					age += 0.01;
+					age += (0.5 / worksheets.size());
 				}
 			}
 		} catch (Exception e) {

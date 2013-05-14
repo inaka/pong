@@ -101,3 +101,31 @@ Averages:
 Averages (with iterations): 
 Mean factor: 2.769185930570065
 0 [inaki, javier, mergoc]; 8 [viking]; 45 [tyler]; 87 [stef]; 159 [canal]; 185 [quique]; 269 [brujo]; 320 [gato]; 464 [chelo]; 598 [mono]; 716 [fede]; 802 [demian]; 932 [amilcar]; 934 [nacho]; 
+-----------
+2013-05-14 17:09:03
+Players: [mitad-de-tabla, tyler, fede, mergoc, inaki, canal, javier, stef, gato, demian, nacho, viking, quique, brujo, chelo, mono, amilcar] (429 matches)
+Pong Rank: 
+773 [viking]; 789 [canal]; 851 [stef]; 853 [tyler]; 854 [quique]; 868 [javier]; 880 [mergoc, inaki]; 882 [mitad-de-tabla]; 893 [gato]; 897 [brujo]; 953 [demian]; 954 [chelo]; 1011 [mono]; 1047 [fede]; 1121 [amilcar]; 1141 [nacho]; 
+
+Averages: 
+0 [inaki, javier, mergoc]; 17 [viking]; 136 [tyler]; 153 [stef]; 172 [canal]; 212 [quique]; 393 [brujo]; 435 [gato]; 516 [chelo]; 619 [mono]; 696 [fede]; 714 [demian]; 831 [amilcar]; 868 [nacho]; 
+
+Averages (with iterations): 
+Mean factor: 2.7735646441870294
+0 [inaki, javier, mergoc]; 8 [viking]; 45 [tyler]; 87 [stef]; 159 [canal]; 180 [quique]; 269 [brujo]; 319 [gato]; 459 [chelo]; 597 [mono]; 715 [fede]; 799 [demian]; 930 [nacho]; 937 [amilcar]; 
+-----------
+2013-05-14 17:26:16
+Players: [mitad-de-tabla, tyler, fede, mergoc, inaki, canal, javier, stef, gato, demian, nacho, viking, quique, brujo, chelo, mono, amilcar] (429 matches)
+Pong Rank: 
+773 [viking]; 789 [canal]; 851 [stef]; 853 [tyler]; 854 [quique]; 868 [javier]; 880 [mergoc, inaki]; 882 [mitad-de-tabla]; 893 [gato]; 897 [brujo]; 953 [demian]; 954 [chelo]; 1011 [mono]; 1047 [fede]; 1121 [amilcar]; 1141 [nacho]; 
+
+Averages: 
+0 [inaki, javier, mergoc]; 17 [viking]; 136 [tyler]; 153 [stef]; 172 [canal]; 212 [quique]; 393 [brujo]; 435 [gato]; 516 [chelo]; 619 [mono]; 696 [fede]; 714 [demian]; 831 [amilcar]; 868 [nacho]; 
+
+Averages (with iterations): 
+Mean factor: 2.7735646441870294
+0 [inaki, javier, mergoc]; 8 [viking]; 45 [tyler]; 87 [stef]; 159 [canal]; 180 [quique]; 269 [brujo]; 319 [gato]; 459 [chelo]; 597 [mono]; 715 [fede]; 799 [demian]; 930 [nacho]; 937 [amilcar]; 
+
+Averages (with age): 
+Mean factor: 2.7735646441870294
+0 [inaki, javier, mergoc]; 6 [viking]; 37 [tyler]; 62 [stef]; 132 [canal]; 171 [quique]; 215 [brujo]; 233 [gato]; 371 [chelo]; 474 [mono]; 597 [fede]; 744 [nacho]; 748 [amilcar]; 755 [demian]; 
