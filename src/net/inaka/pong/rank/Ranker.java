@@ -61,14 +61,43 @@ class Edge {
 	}
 }
 
+class Match {
+	private String	winner;
+	private String	loser;
+	private Double	age;
+
+	public Match(String loser, String winner, Double age) {
+		this.winner = winner;
+		this.loser = loser;
+		this.age = age;
+	}
+
+	public String winner() {
+		return winner;
+	}
+
+	public String loser() {
+		return loser;
+	}
+
+	public Double age() {
+		return age;
+	}
+
+	public Pair<String> name() {
+		return new Pair<String>(this.loser, this.winner);
+	}
+
+}
+
 class TournamentHistory {
 
 	private DirectedSparseGraph<String, Integer>	graph;
 	private Transformer<Integer, Double>			edgeWeights;
-	private List<Pair<String>>						matches;
+	private List<Match>								matches;
 
 	public TournamentHistory(DirectedSparseGraph<String, Integer> g,
-			Transformer<Integer, Double> ew, List<Pair<String>> matches) {
+			Transformer<Integer, Double> ew, List<Match> matches) {
 		this.graph = g;
 		this.edgeWeights = ew;
 		this.matches = matches;
@@ -77,7 +106,7 @@ class TournamentHistory {
 	/**
 	 * @return the matches
 	 */
-	public List<Pair<String>> matches() {
+	public List<Match> matches() {
 		return matches;
 	}
 
@@ -169,16 +198,16 @@ public class Ranker {
 		TreeMap<String, Double> points = new TreeMap<String, Double>();
 		TreeMap<String, Integer> games = new TreeMap<String, Integer>();
 
-		for (Pair<String> match : th.matches()) {
-			points.put(match.getFirst(), 0.0);
-			points.put(match.getSecond(), 0.0);
-			games.put(match.getFirst(), 0);
-			games.put(match.getSecond(), 0);
+		for (Match match : th.matches()) {
+			points.put(match.loser(), 0.0);
+			points.put(match.winner(), 0.0);
+			games.put(match.loser(), 0);
+			games.put(match.winner(), 0);
 		}
-		for (Pair<String> match : th.matches()) {
-			points.put(match.getSecond(), points.get(match.getSecond()) + 1);
-			games.put(match.getFirst(), games.get(match.getFirst()) + 1);
-			games.put(match.getSecond(), games.get(match.getSecond()) + 1);
+		for (Match match : th.matches()) {
+			points.put(match.winner(), points.get(match.winner()) + 1);
+			games.put(match.loser(), games.get(match.loser()) + 1);
+			games.put(match.winner(), games.get(match.winner()) + 1);
 		}
 
 		SortedMap<Integer, List<String>> table = new TreeMap<Integer, List<String>>();
@@ -205,17 +234,13 @@ public class Ranker {
 		TreeMap<String, Double> points = new TreeMap<String, Double>();
 		TreeMap<String, Integer> games = new TreeMap<String, Integer>();
 
-		for (Pair<String> match : th.matches()) {
-			points.put(
-					match.getSecond(),
-					points.get(match.getSecond()) == null ? 1 : points
-							.get(match.getSecond()) + 1);
-			games.put(match.getFirst(), games.get(match.getFirst()) == null ? 1
-					: games.get(match.getFirst()) + 1);
-			games.put(
-					match.getSecond(),
-					games.get(match.getSecond()) == null ? 1 : games.get(match
-							.getSecond()) + 1);
+		for (Match match : th.matches()) {
+			points.put(match.winner(), points.get(match.winner()) == null ? 1
+					: points.get(match.winner()) + 1);
+			games.put(match.loser(), games.get(match.loser()) == null ? 1
+					: games.get(match.loser()) + 1);
+			games.put(match.winner(), games.get(match.winner()) == null ? 1
+					: games.get(match.winner()) + 1);
 		}
 
 		TreeMap<String, Double> avgs = new TreeMap<String, Double>();
@@ -233,11 +258,12 @@ public class Ranker {
 
 		points.clear();
 
-		for (Pair<String> match : th.matches()) {
-			double matchPoints = avgs.get(match.getFirst()) / avgavg;
-			points.put(match.getSecond(),
-					points.get(match.getSecond()) == null ? matchPoints
-							: points.get(match.getSecond()) + matchPoints);
+		for (Match match : th.matches()) {
+			double matchPoints = avgs.get(match.loser()) / avgavg;
+			points.put(
+					match.winner(),
+					points.get(match.winner()) == null ? matchPoints : points
+							.get(match.winner()) + matchPoints);
 		}
 
 		SortedMap<Integer, List<String>> table = new TreeMap<Integer, List<String>>();
@@ -256,7 +282,7 @@ public class Ranker {
 
 	private static TournamentHistory readHistory() {
 		Set<String> players = new HashSet<String>();
-		final List<Pair<String>> matches = new Vector<Pair<String>>();
+		final List<Match> matches = new Vector<Match>();
 
 		String username = "fernando.benavides@inakanetworks.com";
 		String password = "nohaymonedas";
@@ -288,6 +314,7 @@ public class Ranker {
 				}
 
 			List<WorksheetEntry> worksheets = inakaPongSheet.getWorksheets();
+			Double age = 0.01;
 			for (WorksheetEntry worksheet : worksheets) {
 				String[] dates = worksheet.getTitle().getPlainText()
 						.split(" - ");
@@ -343,12 +370,14 @@ public class Ranker {
 									System.out.println("DEBUG: "
 											+ tPlayers[row] + " < "
 											+ tPlayers[(col - 1) / 3 + 1]);
-									matches.add(new Pair<String>(tPlayers[row],
-											tPlayers[(col - 1) / 3 + 1]));
+									matches.add(new Match(tPlayers[row],
+											tPlayers[(col - 1) / 3 + 1], age));
 								}
 							}
 						}
 					}
+
+					age += 0.01;
 				}
 			}
 		} catch (Exception e) {
@@ -383,16 +412,15 @@ public class Ranker {
 					edgeNum++;
 				}
 
-		for (Pair<String> match : matches)
-			if (!players.contains(match.getFirst())
-					|| !players.contains(match.getSecond()))
+		for (Match match : matches)
+			if (!players.contains(match.loser())
+					|| !players.contains(match.winner()))
 				matches.remove(match);
 
-		for (Pair<String> match : matches) {
-			edgesByMatch.get(match).incr();
-			edgesByMatch.get(match).incr();
-			edgesByMatch.get(
-					new Pair<String>(match.getSecond(), match.getFirst()))
+		for (Match match : matches) {
+			edgesByMatch.get(match.name()).incr();
+			edgesByMatch.get(match.name()).incr();
+			edgesByMatch.get(new Pair<String>(match.winner(), match.loser()))
 					.decr();
 		}
 

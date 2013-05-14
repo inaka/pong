@@ -1,0 +1,103 @@
+2013-05-10 17:11:59
+Players: [mitad-de-tabla, tyler, fede, mergoc, inaki, canal, javier, stef, gato, demian, nacho, viking, quique, brujo, chelo, mono, amilcar] (417 matches)
+Pong Rank: 
+770 [viking]; 785 [canal]; 850 [stef]; 852 [tyler]; 854 [quique]; 868 [javier]; 880 [mergoc]; 882 [mitad-de-tabla, inaki]; 894 [gato]; 901 [brujo]; 947 [demian]; 959 [chelo]; 1015 [mono]; 1054 [fede]; 1117 [amilcar]; 1137 [nacho]; 
+
+Averages: 
+0 [javier, mergoc]; 17 [viking]; 136 [tyler]; 153 [stef]; 164 [canal]; 200 [quique]; 404 [brujo]; 435 [gato]; 529 [chelo]; 619 [mono]; 696 [demian]; 704 [fede]; 825 [amilcar]; 863 [nacho]; 
+
+Averages (with iterations): 
+0 [javier, mergoc]; 7 [viking]; 38 [tyler]; 80 [stef]; 134 [canal]; 144 [quique]; 251 [brujo]; 288 [gato]; 417 [chelo]; 534 [mono]; 643 [fede]; 687 [demian]; 820 [nacho]; 841 [amilcar]; 
+-----------
+2013-05-13 09:33:00
+Players: [mitad-de-tabla, tyler, fede, mergoc, inaki, canal, javier, stef, gato, demian, nacho, viking, quique, brujo, chelo, mono, amilcar] (419 matches)
+Pong Rank: 
+771 [viking]; 783 [canal]; 850 [stef]; 852 [tyler]; 854 [quique]; 868 [javier]; 880 [mergoc]; 882 [mitad-de-tabla, inaki]; 894 [gato]; 900 [brujo]; 947 [demian]; 958 [chelo]; 1014 [mono]; 1050 [fede]; 1119 [amilcar]; 1140 [nacho]; 
+
+Averages: 
+0 [javier, mergoc]; 17 [viking]; 136 [tyler]; 153 [stef]; 162 [canal]; 200 [quique]; 404 [brujo]; 435 [gato]; 529 [chelo]; 619 [mono]; 696 [demian, fede]; 827 [amilcar]; 865 [nacho]; 
+
+Averages (with iterations): 
+0 [javier, mergoc]; 6 [viking]; 38 [tyler]; 80 [stef]; 132 [canal]; 144 [quique]; 250 [brujo]; 288 [gato]; 416 [chelo]; 533 [mono]; 636 [fede]; 686 [demian]; 828 [nacho]; 834 [amilcar]; 
+-----------
+2013-05-13 09:57:21
+Players: [mitad-de-tabla, tyler, fede, mergoc, inaki, canal, javier, stef, gato, demian, nacho, viking, quique, brujo, chelo, mono, amilcar] (420 matches)
+Pong Rank: 
+771 [viking]; 784 [canal]; 850 [stef]; 852 [tyler]; 854 [quique]; 868 [javier]; 880 [mergoc, inaki]; 882 [mitad-de-tabla]; 894 [gato]; 904 [brujo]; 947 [demian]; 958 [chelo]; 1014 [mono]; 1050 [fede]; 1119 [amilcar]; 1139 [nacho]; 
+
+Averages: 
+0 [inaki, javier, mergoc]; 17 [viking]; 136 [tyler]; 153 [stef]; 162 [canal]; 200 [quique]; 410 [brujo]; 435 [gato]; 529 [chelo]; 619 [mono]; 696 [demian, fede]; 827 [amilcar]; 865 [nacho]; 
+
+Averages (with iterations): 
+0 [inaki, javier, mergoc]; 6 [viking]; 37 [tyler]; 80 [stef]; 131 [canal]; 143 [quique]; 243 [brujo]; 285 [gato]; 411 [chelo]; 527 [mono]; 627 [fede]; 677 [demian]; 817 [nacho]; 823 [amilcar]; 
+-----------
+2013-05-13 12:31:44
+Players: [mitad-de-tabla, tyler, fede, mergoc, inaki, canal, javier, stef, gato, demian, nacho, viking, quique, brujo, chelo, mono, amilcar] (421 matches)
+Pong Rank: 
+771 [viking]; 784 [canal]; 850 [stef]; 852 [tyler]; 858 [quique]; 868 [javier]; 880 [mergoc, inaki]; 882 [mitad-de-tabla]; 894 [gato]; 902 [brujo]; 947 [demian]; 958 [chelo]; 1014 [mono]; 1050 [fede]; 1118 [amilcar]; 1138 [nacho]; 
+
+Averages: 
+0 [inaki, javier, mergoc]; 17 [viking]; 136 [tyler]; 153 [stef]; 162 [canal]; 225 [quique]; 406 [brujo]; 435 [gato]; 529 [chelo]; 619 [mono]; 696 [demian, fede]; 827 [amilcar]; 865 [nacho]; 
+
+Averages (with iterations): 
+0 [inaki, javier, mergoc]; 6 [viking]; 38 [tyler]; 80 [stef]; 132 [canal]; 171 [quique]; 245 [brujo]; 287 [gato]; 416 [chelo]; 533 [mono]; 637 [fede]; 691 [demian]; 826 [nacho]; 833 [amilcar]; 
+-----------
+2013-05-14 10:21:12
+Players: [mitad-de-tabla, tyler, fede, mergoc, inaki, canal, javier, stef, gato, demian, nacho, viking, quique, brujo, chelo, mono, amilcar] (423 matches)
+Pong Rank: 
+772 [viking]; 784 [canal]; 850 [stef]; 853 [tyler]; 855 [quique]; 868 [javier]; 880 [mergoc, inaki]; 882 [mitad-de-tabla]; 894 [gato]; 900 [brujo]; 950 [demian]; 958 [chelo]; 1013 [mono]; 1049 [fede]; 1120 [amilcar]; 1137 [nacho]; 
+
+Averages: 
+0 [inaki, javier, mergoc]; 17 [viking]; 136 [tyler]; 153 [stef]; 162 [canal]; 218 [quique]; 402 [brujo]; 435 [gato]; 529 [chelo]; 619 [mono]; 696 [fede]; 705 [demian]; 829 [amilcar]; 865 [nacho]; 
+
+Averages (with iterations): 
+Mean factor: 2.7714488177924754
+0 [inaki, javier, mergoc]; 7 [viking]; 43 [tyler]; 89 [stef]; 149 [canal]; 186 [quique]; 273 [brujo]; 322 [gato]; 467 [chelo]; 599 [mono]; 716 [fede]; 785 [demian]; 929 [nacho]; 933 [amilcar]; 
+-----------
+2013-05-14 10:57:30
+Players: [mitad-de-tabla, tyler, fede, mergoc, inaki, canal, javier, stef, gato, demian, nacho, viking, quique, brujo, chelo, mono, amilcar] (424 matches)
+Pong Rank: 
+772 [viking]; 788 [canal]; 850 [stef]; 853 [tyler]; 856 [quique]; 868 [javier]; 880 [mergoc, inaki]; 882 [mitad-de-tabla]; 894 [gato]; 899 [brujo]; 950 [demian]; 958 [chelo]; 1013 [mono]; 1049 [fede]; 1120 [amilcar]; 1137 [nacho]; 
+
+Averages: 
+0 [inaki, javier, mergoc]; 17 [viking]; 136 [tyler]; 153 [stef]; 172 [canal]; 218 [quique]; 397 [brujo]; 435 [gato]; 529 [chelo]; 619 [mono]; 696 [fede]; 705 [demian]; 829 [amilcar]; 865 [nacho]; 
+
+Averages (with iterations): 
+Mean factor: 2.7688012258595216
+0 [inaki, javier, mergoc]; 8 [viking]; 45 [tyler]; 88 [stef]; 159 [canal]; 186 [quique]; 272 [brujo]; 322 [gato]; 469 [chelo]; 600 [mono]; 718 [fede]; 785 [demian]; 930 [nacho]; 935 [amilcar]; 
+-----------
+2013-05-14 13:24:59
+Players: [mitad-de-tabla, tyler, fede, mergoc, inaki, canal, javier, stef, gato, demian, nacho, viking, quique, brujo, chelo, mono, amilcar] (425 matches)
+Pong Rank: 
+772 [viking]; 789 [canal]; 850 [stef]; 853 [tyler]; 856 [quique]; 868 [javier]; 880 [mergoc, inaki]; 882 [mitad-de-tabla]; 894 [gato]; 897 [brujo]; 950 [demian]; 961 [chelo]; 1012 [mono]; 1048 [fede]; 1119 [amilcar]; 1136 [nacho]; 
+
+Averages: 
+0 [inaki, javier, mergoc]; 17 [viking]; 136 [tyler]; 153 [stef]; 172 [canal]; 218 [quique]; 393 [brujo]; 435 [gato]; 534 [chelo]; 619 [mono]; 696 [fede]; 705 [demian]; 829 [amilcar]; 865 [nacho]; 
+
+Averages (with iterations): 
+Mean factor: 2.768105607778541
+0 [inaki, javier, mergoc]; 8 [viking]; 45 [tyler]; 87 [stef]; 159 [canal]; 185 [quique]; 270 [brujo]; 321 [gato]; 475 [chelo]; 600 [mono]; 718 [fede]; 785 [demian]; 930 [nacho]; 935 [amilcar]; 
+-----------
+2013-05-14 14:22:58
+Players: [mitad-de-tabla, tyler, fede, mergoc, inaki, canal, javier, stef, gato, demian, nacho, viking, quique, brujo, chelo, mono, amilcar] (426 matches)
+Pong Rank: 
+773 [viking]; 789 [canal]; 850 [stef]; 853 [tyler]; 856 [quique]; 868 [javier]; 880 [mergoc, inaki]; 882 [mitad-de-tabla]; 894 [gato]; 897 [brujo]; 949 [demian]; 959 [chelo]; 1012 [mono]; 1048 [fede]; 1119 [amilcar]; 1139 [nacho]; 
+
+Averages: 
+0 [inaki, javier, mergoc]; 17 [viking]; 136 [tyler]; 153 [stef]; 172 [canal]; 218 [quique]; 393 [brujo]; 435 [gato]; 528 [chelo]; 619 [mono]; 696 [fede]; 705 [demian]; 829 [amilcar]; 866 [nacho]; 
+
+Averages (with iterations): 
+Mean factor: 2.770334269711824
+0 [inaki, javier, mergoc]; 8 [viking]; 45 [tyler]; 87 [stef]; 159 [canal]; 185 [quique]; 269 [brujo]; 321 [gato]; 470 [chelo]; 599 [mono]; 717 [fede]; 784 [demian]; 934 [amilcar]; 935 [nacho]; 
+-----------
+2013-05-14 15:40:19
+Players: [mitad-de-tabla, tyler, fede, mergoc, inaki, canal, javier, stef, gato, demian, nacho, viking, quique, brujo, chelo, mono, amilcar] (427 matches)
+Pong Rank: 
+773 [viking]; 789 [canal]; 850 [stef]; 853 [tyler]; 856 [quique]; 868 [javier]; 880 [mergoc, inaki]; 882 [mitad-de-tabla]; 894 [gato]; 897 [brujo]; 953 [demian]; 957 [chelo]; 1012 [mono]; 1048 [fede]; 1118 [amilcar]; 1139 [nacho]; 
+
+Averages: 
+0 [inaki, javier, mergoc]; 17 [viking]; 136 [tyler]; 153 [stef]; 172 [canal]; 218 [quique]; 393 [brujo]; 435 [gato]; 522 [chelo]; 619 [mono]; 696 [fede]; 714 [demian]; 829 [amilcar]; 866 [nacho]; 
+
+Averages (with iterations): 
+Mean factor: 2.769185930570065
+0 [inaki, javier, mergoc]; 8 [viking]; 45 [tyler]; 87 [stef]; 159 [canal]; 185 [quique]; 269 [brujo]; 320 [gato]; 464 [chelo]; 598 [mono]; 716 [fede]; 802 [demian]; 932 [amilcar]; 934 [nacho]; 
