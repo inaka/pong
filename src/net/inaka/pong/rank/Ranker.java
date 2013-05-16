@@ -249,14 +249,14 @@ public class Ranker {
 		DoubleArrayList avgsList = new DoubleArrayList(avgs.size());
 		avgsList.addAllOf(avgs.values());
 		avgsList.sort();
-		Double avgavg = Descriptive.mean(avgsList);
+		Double maxavg = Descriptive.max(avgsList);
 
-		System.out.println("Mean factor: " + (1 / avgavg));
+		System.out.println("Match points range: 0.5 - " + (0.5 + (1 / maxavg)));
 
 		points.clear();
 
 		for (Match match : th.matches()) {
-			double matchPoints = avgs.get(match.loser()) / avgavg;
+			double matchPoints = .5 + avgs.get(match.loser()) / maxavg;
 			points.put(
 					match.winner(),
 					points.get(match.winner()) == null ? matchPoints : points
