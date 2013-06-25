@@ -210,15 +210,25 @@ public class Ranker {
 		SortedMap<Integer, List<String>> table = new TreeMap<Integer, List<String>>();
 
 		for (String v : games.keySet()) {
-			System.out.println("DEBUG - " + v + ": " + points.get(v) + "/"
-					+ games.get(v));
 			int score = new Double(points.get(v) / games.get(v) * 1000)
 					.intValue();
-			List<String> current = table.get(score);
-			if (current == null)
+			if (table.get(score) == null)
 				table.put(score, new Vector<String>());
 			table.get(score).add(v);
 		}
+
+		if (table.get(0) == null)
+			table.put(0, new Vector<String>());
+		table.get(0).add(">>total-looser<<");
+
+		if (table.get(500) == null)
+			table.put(500, new Vector<String>());
+		table.get(500).add(">>average-player<<");
+
+		if (table.get(1000) == null)
+			table.put(1000, new Vector<String>());
+		table.get(1000).add(">>master-of-pong<<");
+
 		return table;
 	}
 
@@ -246,34 +256,43 @@ public class Ranker {
 					points.get(v) == null ? 0.0 : points.get(v) / games.get(v));
 		}
 
-		DoubleArrayList avgsList = new DoubleArrayList(avgs.size());
-		avgsList.addAllOf(avgs.values());
-		avgsList.sort();
-		Double maxavg = Descriptive.max(avgsList);
-
-		System.out.println("Match points range: 0.5 - " + (0.5 + (1 / maxavg)));
-
 		points.clear();
 
 		for (Match match : th.matches()) {
-			double matchPoints = .5 + avgs.get(match.loser()) / maxavg;
+			double matchPoints = .5 + avgs.get(match.loser());
 			points.put(
 					match.winner(),
 					points.get(match.winner()) == null ? matchPoints : points
 							.get(match.winner()) + matchPoints);
 		}
 
+		points.put(">>master-of-pong<<", 0.0);
+		points.put(">>average-player<<", 0.0);
+		for (String v : games.keySet()) {
+			double matchPoints = .5 + avgs.get(v);
+			points.put(">>master-of-pong<<", points.get(">>master-of-pong<<")
+					+ matchPoints);
+			points.put(">>average-player<<", points.get(">>average-player<<")
+					+ matchPoints);
+		}
+		games.put(">>master-of-pong<<", games.size());
+		games.put(">>average-player<<", games.size() * 2);
+
 		SortedMap<Integer, List<String>> table = new TreeMap<Integer, List<String>>();
 
 		for (String v : games.keySet()) {
-			int score = points.get(v) == null ? 0 : new Double(new Double(
-					points.get(v)) / new Double(games.get(v)) * 1000)
-					.intValue();
+			int score = points.get(v) == null ? 0 : new Double(points.get(v)
+					/ games.get(v) * 1000).intValue();
 			List<String> current = table.get(score);
 			if (current == null)
 				table.put(score, new Vector<String>());
 			table.get(score).add(v);
 		}
+
+		if (table.get(0) == null)
+			table.put(0, new Vector<String>());
+		table.get(0).add(">>total-looser<<");
+
 		return table;
 	}
 
@@ -441,7 +460,7 @@ public class Ranker {
 			e.printStackTrace();
 		}
 
-		players.add("mitad-de-tabla");
+		players.add(">>average-player<<");
 
 		System.out.println("Players: " + players + " (" + matches.size()
 				+ " matches)");
