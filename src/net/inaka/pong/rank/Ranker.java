@@ -191,14 +191,6 @@ public class Ranker {
 				.entrySet()) {
 			System.out.print(entry.getKey() + " " + entry.getValue() + "; ");
 		}
-		System.out.println();
-		System.out.println();
-		System.out
-				.println("Averages (with iterations including final rounds): ");
-		for (Entry<Integer, List<String>> entry : averages2(th, true)
-				.entrySet()) {
-			System.out.print(entry.getKey() + " " + entry.getValue() + "; ");
-		}
 	}
 
 	/**
@@ -288,16 +280,12 @@ public class Ranker {
 		TreeMap<String, Integer> games = new TreeMap<String, Integer>();
 
 		for (Match match : th.matches()) {
-			if (includeFinalRound || match.round() == Round.REGULAR) {
-				points.put(
-						match.winner(),
-						points.get(match.winner()) == null ? 1 : points
-								.get(match.winner()) + 1);
-				games.put(match.loser(), games.get(match.loser()) == null ? 1
-						: games.get(match.loser()) + 1);
-				games.put(match.winner(), games.get(match.winner()) == null ? 1
-						: games.get(match.winner()) + 1);
-			}
+			points.put(match.winner(), points.get(match.winner()) == null ? 1
+					: points.get(match.winner()) + 1);
+			games.put(match.loser(), games.get(match.loser()) == null ? 1
+					: games.get(match.loser()) + 1);
+			games.put(match.winner(), games.get(match.winner()) == null ? 1
+					: games.get(match.winner()) + 1);
 		}
 
 		TreeMap<String, Double> avgs = new TreeMap<String, Double>();
