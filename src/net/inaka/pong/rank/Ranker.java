@@ -282,10 +282,12 @@ public class Ranker {
 		for (Match match : th.matches()) {
 			points.put(match.winner(), points.get(match.winner()) == null ? 1
 					: points.get(match.winner()) + 1);
-			games.put(match.loser(), games.get(match.loser()) == null ? 1
-					: games.get(match.loser()) + 1);
-			games.put(match.winner(), games.get(match.winner()) == null ? 1
-					: games.get(match.winner()) + 1);
+			if (includeFinalRound || match.round() == Round.REGULAR) {
+				games.put(match.loser(), games.get(match.loser()) == null ? 1
+						: games.get(match.loser()) + 1);
+				games.put(match.winner(), games.get(match.winner()) == null ? 1
+						: games.get(match.winner()) + 1);
+			}
 		}
 
 		TreeMap<String, Double> avgs = new TreeMap<String, Double>();
