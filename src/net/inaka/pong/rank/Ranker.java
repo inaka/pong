@@ -11,10 +11,9 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import org.apache.commons.collections15.Transformer;
+import net.inaka.pong.rank.Match.Round;
 
-import cern.colt.list.DoubleArrayList;
-import cern.jet.stat.Descriptive;
+import org.apache.commons.collections15.Transformer;
 
 import com.google.gdata.client.spreadsheet.SpreadsheetQuery;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
@@ -60,14 +59,41 @@ class Edge {
 }
 
 class Match {
+	public enum Round {
+		REGULAR, SEMIFINAL, FINAL, THIRD_PLACE
+	}
+
 	private String	winner;
 	private String	loser;
 	private Double	age;
+	private Round	round;
 
 	public Match(String loser, String winner, Double age) {
+		this(loser, winner, Round.REGULAR, age);
+	}
+
+	public Match(String loser, String winner, Round round, Double age) {
 		this.winner = winner;
 		this.loser = loser;
 		this.age = age;
+		this.round = round;
+	}
+
+	public Match(Object[] data, Round round, Double age) {
+		this.round = round;
+		this.age = age;
+		if (((Number) data[2]).intValue() < ((Number) data[3]).intValue()) {
+			this.loser = data[0].toString();
+			this.winner = data[1].toString();
+		} else {
+			this.loser = data[1].toString();
+			this.winner = data[0].toString();
+		}
+		System.out.println("DEBUG: Special match: " + this);
+	}
+
+	public Round round() {
+		return round;
 	}
 
 	public String winner() {
@@ -84,6 +110,11 @@ class Match {
 
 	public Pair<String> name() {
 		return new Pair<String>(this.loser, this.winner);
+	}
+
+	@Override
+	public String toString() {
+		return this.winner + " def. " + this.loser + " (" + this.round + ")";
 	}
 
 }
@@ -150,13 +181,22 @@ public class Ranker {
 		System.out.println();
 		System.out.println();
 		System.out.println("Averages: ");
-		for (Entry<Integer, List<String>> entry : averages(th).entrySet()) {
+		for (Entry<Integer, List<String>> entry : averages(th, true).entrySet()) {
 			System.out.print(entry.getKey() + " " + entry.getValue() + "; ");
 		}
 		System.out.println();
 		System.out.println();
 		System.out.println("Averages (with iterations): ");
-		for (Entry<Integer, List<String>> entry : averages2(th).entrySet()) {
+		for (Entry<Integer, List<String>> entry : averages2(th, false)
+				.entrySet()) {
+			System.out.print(entry.getKey() + " " + entry.getValue() + "; ");
+		}
+		System.out.println();
+		System.out.println();
+		System.out
+				.println("Averages (with iterations including final rounds): ");
+		for (Entry<Integer, List<String>> entry : averages2(th, true)
+				.entrySet()) {
 			System.out.print(entry.getKey() + " " + entry.getValue() + "; ");
 		}
 	}
@@ -188,23 +228,28 @@ public class Ranker {
 
 	/**
 	 * @param th
+	 * @param includeFinalRound
 	 * @return
 	 */
 	private static SortedMap<Integer, List<String>> averages(
-			TournamentHistory th) {
+			TournamentHistory th, boolean includeFinalRound) {
 		TreeMap<String, Double> points = new TreeMap<String, Double>();
 		TreeMap<String, Integer> games = new TreeMap<String, Integer>();
 
 		for (Match match : th.matches()) {
-			points.put(match.loser(), 0.0);
-			points.put(match.winner(), 0.0);
-			games.put(match.loser(), 0);
-			games.put(match.winner(), 0);
+			if (includeFinalRound || match.round() == Round.REGULAR) {
+				points.put(match.loser(), 0.0);
+				points.put(match.winner(), 0.0);
+				games.put(match.loser(), 0);
+				games.put(match.winner(), 0);
+			}
 		}
 		for (Match match : th.matches()) {
-			points.put(match.winner(), points.get(match.winner()) + 1);
-			games.put(match.loser(), games.get(match.loser()) + 1);
-			games.put(match.winner(), games.get(match.winner()) + 1);
+			if (includeFinalRound || match.round() == Round.REGULAR) {
+				points.put(match.winner(), points.get(match.winner()) + 1);
+				games.put(match.loser(), games.get(match.loser()) + 1);
+				games.put(match.winner(), games.get(match.winner()) + 1);
+			}
 		}
 
 		SortedMap<Integer, List<String>> table = new TreeMap<Integer, List<String>>();
@@ -234,20 +279,25 @@ public class Ranker {
 
 	/**
 	 * @param th
+	 * @param includeFinalRound
 	 * @return
 	 */
 	private static SortedMap<Integer, List<String>> averages2(
-			TournamentHistory th) {
+			TournamentHistory th, boolean includeFinalRound) {
 		TreeMap<String, Double> points = new TreeMap<String, Double>();
 		TreeMap<String, Integer> games = new TreeMap<String, Integer>();
 
 		for (Match match : th.matches()) {
-			points.put(match.winner(), points.get(match.winner()) == null ? 1
-					: points.get(match.winner()) + 1);
-			games.put(match.loser(), games.get(match.loser()) == null ? 1
-					: games.get(match.loser()) + 1);
-			games.put(match.winner(), games.get(match.winner()) == null ? 1
-					: games.get(match.winner()) + 1);
+			if (includeFinalRound || match.round() == Round.REGULAR) {
+				points.put(
+						match.winner(),
+						points.get(match.winner()) == null ? 1 : points
+								.get(match.winner()) + 1);
+				games.put(match.loser(), games.get(match.loser()) == null ? 1
+						: games.get(match.loser()) + 1);
+				games.put(match.winner(), games.get(match.winner()) == null ? 1
+						: games.get(match.winner()) + 1);
+			}
 		}
 
 		TreeMap<String, Double> avgs = new TreeMap<String, Double>();
@@ -259,11 +309,12 @@ public class Ranker {
 		points.clear();
 
 		for (Match match : th.matches()) {
-			double matchPoints = .5 + avgs.get(match.loser());
-			points.put(
-					match.winner(),
-					points.get(match.winner()) == null ? matchPoints : points
-							.get(match.winner()) + matchPoints);
+			if (includeFinalRound || match.round() == Round.REGULAR) {
+				double matchPoints = .5 + avgs.get(match.loser());
+				points.put(match.winner(),
+						points.get(match.winner()) == null ? matchPoints
+								: points.get(match.winner()) + matchPoints);
+			}
 		}
 
 		points.put(">>master-of-pong<<", 0.0);
@@ -293,62 +344,6 @@ public class Ranker {
 			table.put(0, new Vector<String>());
 		table.get(0).add(">>total-looser<<");
 
-		return table;
-	}
-
-	/**
-	 * @param th
-	 * @return
-	 */
-	private static SortedMap<Integer, List<String>> averages3(
-			TournamentHistory th) {
-		TreeMap<String, Double> points = new TreeMap<String, Double>();
-		TreeMap<String, Integer> games = new TreeMap<String, Integer>();
-
-		for (Match match : th.matches()) {
-			points.put(match.winner(), points.get(match.winner()) == null ? 1
-					: points.get(match.winner()) + 1);
-			games.put(match.loser(), games.get(match.loser()) == null ? 1
-					: games.get(match.loser()) + 1);
-			games.put(match.winner(), games.get(match.winner()) == null ? 1
-					: games.get(match.winner()) + 1);
-		}
-
-		TreeMap<String, Double> avgs = new TreeMap<String, Double>();
-		for (String v : games.keySet()) {
-			avgs.put(v,
-					points.get(v) == null ? 0.0 : points.get(v) / games.get(v));
-		}
-
-		DoubleArrayList avgsList = new DoubleArrayList(avgs.size());
-		avgsList.addAllOf(avgs.values());
-		avgsList.sort();
-		Double avgavg = Descriptive.mean(avgsList);
-
-		System.out.println("Mean factor: " + (1 / avgavg));
-
-		points.clear();
-
-		for (Match match : th.matches()) {
-			double matchPoints = avgs.get(match.loser()) / avgavg
-					* (1 - match.age());
-			points.put(
-					match.winner(),
-					points.get(match.winner()) == null ? matchPoints : points
-							.get(match.winner()) + matchPoints);
-		}
-
-		SortedMap<Integer, List<String>> table = new TreeMap<Integer, List<String>>();
-
-		for (String v : games.keySet()) {
-			int score = points.get(v) == null ? 0 : new Double(new Double(
-					points.get(v)) / new Double(games.get(v)) * 1000)
-					.intValue();
-			List<String> current = table.get(score);
-			if (current == null)
-				table.put(score, new Vector<String>());
-			table.get(score).add(v);
-		}
 		return table;
 	}
 
@@ -392,6 +387,7 @@ public class Ranker {
 				if (tournaments == 0)
 					break;
 				tournaments--;
+
 				String[] dates = worksheet.getTitle().getPlainText()
 						.split(" - ");
 				if (dates.length == 2) {
@@ -438,7 +434,7 @@ public class Ranker {
 								System.out.println("DEBUG: Reading data for "
 										+ tPlayers[row] + "...");
 
-							if (row > 1 && col > 1 && col < 44
+							if (row > 1 && row < 16 && col > 1 && col < 44
 									&& (col - 1) % 3 == 0) {
 								if (cell.getCell().getNumericValue() != null
 										&& cell.getCell().getNumericValue()
@@ -452,6 +448,55 @@ public class Ranker {
 							}
 						}
 					}
+
+					Object[] semifinal1 = new Object[4];
+					Object[] semifinal2 = new Object[4];
+					Object[] theFinal = new Object[4];
+					Object[] thirdPlace = new Object[4];
+					for (CellEntry cell : cellFeed.getEntries()) {
+						int col = cell.getCell().getCol();
+						int row = cell.getCell().getRow();
+
+						if ((row == 21 || row == 22) && col == 2) {
+							String playerName = cell.getTextContent()
+									.getContent().getPlainText().toLowerCase();
+							semifinal1[row - 21] = playerName;
+						} else if ((row == 21 || row == 22) && col == 6) {
+							semifinal1[row - 19] = cell.getCell()
+									.getNumericValue();
+						} else if ((row == 25 || row == 26) && col == 2) {
+							String playerName = cell.getTextContent()
+									.getContent().getPlainText().toLowerCase();
+							semifinal2[row - 25] = playerName;
+						} else if ((row == 25 || row == 26) && col == 6) {
+							semifinal2[row - 23] = cell.getCell()
+									.getNumericValue();
+						} else if ((row == 23 || row == 24) && col == 8) {
+							String playerName = cell.getTextContent()
+									.getContent().getPlainText().toLowerCase();
+							theFinal[row - 23] = playerName;
+						} else if ((row == 23 || row == 24) && col == 12) {
+							theFinal[row - 21] = cell.getCell()
+									.getNumericValue();
+						} else if ((row == 25 || row == 26) && col == 17) {
+							String playerName = cell.getTextContent()
+									.getContent().getPlainText().toLowerCase();
+							thirdPlace[row - 25] = playerName;
+						} else if ((row == 25 || row == 26) && col == 21) {
+							thirdPlace[row - 23] = cell.getCell()
+									.getNumericValue();
+						}
+					}
+
+					if (semifinal1[2] != null && semifinal1[3] != null)
+						matches.add(new Match(semifinal1, Round.SEMIFINAL, age));
+					if (semifinal2[2] != null && semifinal2[3] != null)
+						matches.add(new Match(semifinal2, Round.SEMIFINAL, age));
+					if (theFinal[2] != null && theFinal[3] != null)
+						matches.add(new Match(theFinal, Round.FINAL, age));
+					if (thirdPlace[2] != null && thirdPlace[3] != null)
+						matches.add(new Match(thirdPlace, Round.THIRD_PLACE,
+								age));
 
 					age += (0.5 / worksheets.size());
 				}
@@ -496,8 +541,29 @@ public class Ranker {
 		for (Match match : matches) {
 			edgesByMatch.get(match.name()).incr();
 			edgesByMatch.get(match.name()).incr();
-			edgesByMatch.get(new Pair<String>(match.winner(), match.loser()))
-					.decr();
+			switch (match.round()) {
+			case REGULAR:
+				// Deduce points to the looser
+				edgesByMatch.get(
+						new Pair<String>(match.winner(), match.loser())).decr();
+				break;
+			case SEMIFINAL:
+				// Add two extra points to the winner
+				edgesByMatch.get(match.name()).incr();
+				edgesByMatch.get(match.name()).incr();
+				break;
+			case FINAL:
+				// Add two extra points to the winner
+				edgesByMatch.get(match.name()).incr();
+				edgesByMatch.get(match.name()).incr();
+				break;
+			case THIRD_PLACE:
+				// Add an extra point to the winner
+				edgesByMatch.get(match.name()).incr();
+				break;
+			}
+			// So… champion gets 4 extra points, runner up 2 extra points, 3rd 1
+			// extra point and 4th remains unaffected
 		}
 
 		Transformer<Integer, Double> ew = new Transformer<Integer, Double>() {
