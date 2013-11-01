@@ -301,6 +301,9 @@ public class Ranker {
 		for (Match match : th.matches()) {
 			if (includeFinalRound || match.round() == Round.REGULAR) {
 				double matchPoints = .5 + avgs.get(match.loser());
+				if (avgs.get(match.loser()) < avgs.get(match.winner())
+						&& matchPoints < 1)
+					matchPoints = 1.0;
 				points.put(match.winner(),
 						points.get(match.winner()) == null ? matchPoints
 								: points.get(match.winner()) + matchPoints);
@@ -311,10 +314,11 @@ public class Ranker {
 		points.put(">>average-player<<", 0.0);
 		for (String v : games.keySet()) {
 			double matchPoints = .5 + avgs.get(v);
+			double masterPoints = matchPoints < 1 ? 1 : matchPoints;
 			points.put(">>master-of-pong<<", points.get(">>master-of-pong<<")
-					+ matchPoints);
+					+ masterPoints);
 			points.put(">>average-player<<", points.get(">>average-player<<")
-					+ matchPoints);
+					+ masterPoints);
 		}
 		games.put(">>master-of-pong<<", games.size());
 		games.put(">>average-player<<", games.size() * 2);
