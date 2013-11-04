@@ -404,7 +404,7 @@ public class Ranker {
 								playerName = "gato";
 							else if (origPlayerName.equals("steph"))
 								playerName = "stef";
-							else if (origPlayerName.equals("iñaki"))
+							else if (origPlayerName.endsWith("aki"))
 								playerName = "inaki";
 
 							if (playerName != null && playerName.length() > 0) {
@@ -556,7 +556,7 @@ public class Ranker {
 				edgesByMatch.get(match.name()).incr();
 				break;
 			}
-			// So… champion gets 4 extra points, runner up 2 extra points, 3rd 1
+			// So, champion gets 4 extra points, runner up 2 extra points, 3rd 1
 			// extra point and 4th remains unaffected
 		}
 
