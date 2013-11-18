@@ -1,6 +1,7 @@
 package net.inaka.pong.rank;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -29,8 +30,8 @@ import edu.uci.ics.jung.graph.util.Pair;
 
 class Edge {
 
-	private int	edgeNum;
-	private int	weight	= 0;
+	private int edgeNum;
+	private int weight = 0;
 
 	public Edge(int edgeNum) {
 		this.edgeNum = edgeNum;
@@ -60,13 +61,13 @@ class Edge {
 
 class Match {
 	public enum Round {
-		REGULAR, SEMIFINAL, FINAL, THIRD_PLACE
+		REGULAR, QUARTER, SEMIFINAL, FINAL, THIRD_PLACE
 	}
 
-	private String	winner;
-	private String	loser;
-	private Double	age;
-	private Round	round;
+	private String winner;
+	private String loser;
+	private Double age;
+	private Round round;
 
 	public Match(String loser, String winner, Double age) {
 		this(loser, winner, Round.REGULAR, age);
@@ -121,9 +122,9 @@ class Match {
 
 class TournamentHistory {
 
-	private DirectedSparseGraph<String, Integer>	graph;
-	private Transformer<Integer, Double>			edgeWeights;
-	private List<Match>								matches;
+	private DirectedSparseGraph<String, Integer> graph;
+	private Transformer<Integer, Double> edgeWeights;
+	private List<Match> matches;
 
 	public TournamentHistory(DirectedSparseGraph<String, Integer> g,
 			Transformer<Integer, Double> ew, List<Match> matches) {
@@ -376,7 +377,7 @@ public class Ranker {
 
 			List<WorksheetEntry> worksheets = inakaPongSheet.getWorksheets();
 			Double age = 0.0;
-			int tournaments = 6;
+			int tournaments = 1;
 			for (WorksheetEntry worksheet : worksheets) {
 				if (tournaments == 0)
 					break;
@@ -399,13 +400,7 @@ public class Ranker {
 						if (col == 1) {
 							String origPlayerName = cell.getTextContent()
 									.getContent().getPlainText().toLowerCase();
-							String playerName = origPlayerName;
-							if (origPlayerName.equals("gato?"))
-								playerName = "gato";
-							else if (origPlayerName.equals("steph"))
-								playerName = "stef";
-							else if (origPlayerName.endsWith("aki"))
-								playerName = "inaki";
+							String playerName = sanitize(origPlayerName);
 
 							if (playerName != null && playerName.length() > 0) {
 								System.out.println("DEBUG: Player #" + row
@@ -443,6 +438,8 @@ public class Ranker {
 						}
 					}
 
+					Object[] quarter1 = new Object[4];
+					Object[] quarter2 = new Object[4];
 					Object[] semifinal1 = new Object[4];
 					Object[] semifinal2 = new Object[4];
 					Object[] theFinal = new Object[4];
@@ -451,37 +448,62 @@ public class Ranker {
 						int col = cell.getCell().getCol();
 						int row = cell.getCell().getRow();
 
-						if ((row == 21 || row == 22) && col == 2) {
+						if ((row == 21 || row == 22) && col == 8) {
 							String playerName = cell.getTextContent()
 									.getContent().getPlainText().toLowerCase();
-							semifinal1[row - 21] = playerName;
-						} else if ((row == 21 || row == 22) && col == 6) {
+							quarter1[row - 21] = sanitize(playerName);
+						} else if ((row == 21 || row == 22) && col == 12) {
+							quarter1[row - 19] = cell.getCell()
+									.getNumericValue();
+						} else if ((row == 21 || row == 22) && col == 15) {
+							String playerName = cell.getTextContent()
+									.getContent().getPlainText().toLowerCase();
+							semifinal1[row - 21] = sanitize(playerName);
+						} else if ((row == 21 || row == 22) && col == 20) {
 							semifinal1[row - 19] = cell.getCell()
 									.getNumericValue();
-						} else if ((row == 25 || row == 26) && col == 2) {
+						} else if ((row == 25 || row == 26) && col == 8) {
 							String playerName = cell.getTextContent()
 									.getContent().getPlainText().toLowerCase();
-							semifinal2[row - 25] = playerName;
-						} else if ((row == 25 || row == 26) && col == 6) {
+							quarter2[row - 25] = sanitize(playerName);
+						} else if ((row == 25 || row == 26) && col == 12) {
+							quarter2[row - 23] = cell.getCell()
+									.getNumericValue();
+						} else if ((row == 25 || row == 26) && col == 15) {
+							String playerName = cell.getTextContent()
+									.getContent().getPlainText().toLowerCase();
+							semifinal2[row - 25] = sanitize(playerName);
+						} else if ((row == 25 || row == 26) && col == 20) {
 							semifinal2[row - 23] = cell.getCell()
 									.getNumericValue();
-						} else if ((row == 23 || row == 24) && col == 8) {
+						} else if ((row == 23 || row == 24) && col == 21) {
 							String playerName = cell.getTextContent()
 									.getContent().getPlainText().toLowerCase();
-							theFinal[row - 23] = playerName;
-						} else if ((row == 23 || row == 24) && col == 12) {
+							theFinal[row - 23] = sanitize(playerName);
+						} else if ((row == 23 || row == 24) && col == 26) {
 							theFinal[row - 21] = cell.getCell()
 									.getNumericValue();
-						} else if ((row == 25 || row == 26) && col == 17) {
+						} else if ((row == 25 || row == 26) && col == 30) {
 							String playerName = cell.getTextContent()
 									.getContent().getPlainText().toLowerCase();
-							thirdPlace[row - 25] = playerName;
-						} else if ((row == 25 || row == 26) && col == 21) {
+							thirdPlace[row - 25] = sanitize(playerName);
+						} else if ((row == 25 || row == 26) && col == 35) {
 							thirdPlace[row - 23] = cell.getCell()
 									.getNumericValue();
 						}
 					}
 
+					Object[][] specialMatches = new Object[][] { quarter1,
+							quarter2, semifinal1, semifinal2, theFinal,
+							thirdPlace };
+					for (int p = 0; p < 6; p++)
+						System.out.println("DEBUG: " + specialMatches[p][0]
+								+ " v. " + specialMatches[p][1]);
+
+					if (quarter1[2] != null && quarter1[3] != null)
+						matches.add(new Match(quarter1, Round.QUARTER, age));
+					if (quarter2[2] != null && quarter2[3] != null)
+						matches.add(new Match(quarter2, Round.QUARTER, age));
 					if (semifinal1[2] != null && semifinal1[3] != null)
 						matches.add(new Match(semifinal1, Round.SEMIFINAL, age));
 					if (semifinal2[2] != null && semifinal2[3] != null)
@@ -529,8 +551,10 @@ public class Ranker {
 
 		for (Match match : matches)
 			if (!players.contains(match.loser())
-					|| !players.contains(match.winner()))
+					|| !players.contains(match.winner())) {
+				System.out.println("DEBUG: Deleting " + match);
 				matches.remove(match);
+			}
 
 		for (Match match : matches) {
 			edgesByMatch.get(match.name()).incr();
@@ -540,6 +564,10 @@ public class Ranker {
 				// Deduce points to the looser
 				edgesByMatch.get(
 						new Pair<String>(match.winner(), match.loser())).decr();
+				break;
+			case QUARTER:
+				// Add no extra points to the winner, but deduce nothing to the
+				// looser
 				break;
 			case SEMIFINAL:
 				// Add two extra points to the winner
@@ -570,5 +598,16 @@ public class Ranker {
 		};
 
 		return new TournamentHistory(g, ew, matches);
+	}
+
+	private static String sanitize(String origPlayerName) {
+		String playerName = origPlayerName;
+		if (origPlayerName.equals("gato?"))
+			playerName = "gato";
+		else if (origPlayerName.equals("steph"))
+			playerName = "stef";
+		else if (origPlayerName.endsWith("aki"))
+			playerName = "inaki";
+		return playerName;
 	}
 }
