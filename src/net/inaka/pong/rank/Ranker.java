@@ -377,7 +377,7 @@ public class Ranker {
 
 			List<WorksheetEntry> worksheets = inakaPongSheet.getWorksheets();
 			Double age = 0.0;
-			int tournaments = 3;
+			int tournaments = 4;
 			for (WorksheetEntry worksheet : worksheets) {
 				if (tournaments == 0)
 					break;
