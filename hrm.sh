@@ -47,7 +47,6 @@ while getopts “ht:r:f:c:o:n” OPTION; do
     h) usage; exit 1;;
     t) TOKEN=$OPTARG;;
     r) ROOM_ID=$OPTARG;;
-    f) FROM=$OPTARG;;
     c) COLOR=$OPTARG;;
     n) NOTIFY=1;;
     o) HOST=$OPTARG;;
@@ -56,7 +55,7 @@ while getopts “ht:r:f:c:o:n” OPTION; do
 done
 
 # check for required args
-if [[ -z $TOKEN ]] || [[ -z $ROOM_ID ]] || [[ -z $FROM ]]; then
+if [[ -z $TOKEN ]] || [[ -z $ROOM_ID ]]; then
   usage
   exit 1
 fi
@@ -75,5 +74,5 @@ INPUT=$(echo -n "${INPUT}" | perl -p -e 's/([^A-Za-z0-9])/sprintf("%%%02X", ord(
 
 # do the curl
 curl -sS \
-  -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message=$INPUT&notify=$NOTIFY" \
-  https://$HOST/v1/rooms/message
+  -H "Content-Type: application/x-www-form-urlencoded" -d "message=$INPUT&color=gray" \
+  https://$HOST/v2/room/$ROOM_ID/notification?auth_token=$TOKEN
