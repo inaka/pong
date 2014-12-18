@@ -377,7 +377,7 @@ public class Ranker {
 
 			List<WorksheetEntry> worksheets = inakaPongSheet.getWorksheets();
 			Double age = 0.0;
-			int tournaments = 3;
+			int tournaments = 2;
 			for (WorksheetEntry worksheet : worksheets) {
 				if (tournaments == 0)
 					break;
@@ -448,47 +448,47 @@ public class Ranker {
 						int col = cell.getCell().getCol();
 						int row = cell.getCell().getRow();
 
-						if ((row == 21 || row == 22) && col == 8) {
+						if ((row == 26 || row == 27) && col == 8) {
 							String playerName = cell.getTextContent()
 									.getContent().getPlainText().toLowerCase();
-							quarter1[row - 21] = sanitize(playerName);
-						} else if ((row == 21 || row == 22) && col == 12) {
-							quarter1[row - 19] = cell.getCell()
+							quarter1[row - 26] = sanitize(playerName);
+						} else if ((row == 26 || row == 27) && col == 12) {
+							quarter1[row - 24] = cell.getCell()
 									.getNumericValue();
-						} else if ((row == 21 || row == 22) && col == 15) {
+						} else if ((row == 26 || row == 27) && col == 15) {
 							String playerName = cell.getTextContent()
 									.getContent().getPlainText().toLowerCase();
-							semifinal1[row - 21] = sanitize(playerName);
-						} else if ((row == 21 || row == 22) && col == 20) {
-							semifinal1[row - 19] = cell.getCell()
+							semifinal1[row - 26] = sanitize(playerName);
+						} else if ((row == 26 || row == 27) && col == 20) {
+							semifinal1[row - 24] = cell.getCell()
 									.getNumericValue();
-						} else if ((row == 25 || row == 26) && col == 8) {
+						} else if ((row == 30 || row == 31) && col == 8) {
 							String playerName = cell.getTextContent()
 									.getContent().getPlainText().toLowerCase();
-							quarter2[row - 25] = sanitize(playerName);
-						} else if ((row == 25 || row == 26) && col == 12) {
-							quarter2[row - 23] = cell.getCell()
+							quarter2[row - 30] = sanitize(playerName);
+						} else if ((row == 30 || row == 31) && col == 12) {
+							quarter2[row - 28] = cell.getCell()
 									.getNumericValue();
-						} else if ((row == 25 || row == 26) && col == 15) {
+						} else if ((row == 30 || row == 31) && col == 15) {
 							String playerName = cell.getTextContent()
 									.getContent().getPlainText().toLowerCase();
-							semifinal2[row - 25] = sanitize(playerName);
-						} else if ((row == 25 || row == 26) && col == 20) {
-							semifinal2[row - 23] = cell.getCell()
+							semifinal2[row - 30] = sanitize(playerName);
+						} else if ((row == 30 || row == 31) && col == 20) {
+							semifinal2[row - 28] = cell.getCell()
 									.getNumericValue();
-						} else if ((row == 23 || row == 24) && col == 21) {
+						} else if ((row == 28 || row == 29) && col == 21) {
 							String playerName = cell.getTextContent()
 									.getContent().getPlainText().toLowerCase();
-							theFinal[row - 23] = sanitize(playerName);
-						} else if ((row == 23 || row == 24) && col == 26) {
-							theFinal[row - 21] = cell.getCell()
+							theFinal[row - 28] = sanitize(playerName);
+						} else if ((row == 28 || row == 29) && col == 26) {
+							theFinal[row - 26] = cell.getCell()
 									.getNumericValue();
-						} else if ((row == 25 || row == 26) && col == 30) {
+						} else if ((row == 30 || row == 31) && col == 30) {
 							String playerName = cell.getTextContent()
 									.getContent().getPlainText().toLowerCase();
-							thirdPlace[row - 25] = sanitize(playerName);
-						} else if ((row == 25 || row == 26) && col == 35) {
-							thirdPlace[row - 23] = cell.getCell()
+							thirdPlace[row - 30] = sanitize(playerName);
+						} else if ((row == 30 || row == 31) && col == 35) {
+							thirdPlace[row - 28] = cell.getCell()
 									.getNumericValue();
 						}
 					}
@@ -608,6 +608,8 @@ public class Ranker {
 			playerName = "stef";
 		else if (origPlayerName.endsWith("aki"))
 			playerName = "inaki";
+		else if (origPlayerName.endsWith("ale kills"))
+			playerName = "alejandro";
 		return playerName;
 	}
 }
